@@ -96,3 +96,5 @@ class Builder:
             "recipes": [],
             "sink_item_id": None
         }
+        self.station_ids = []
+        self.items = []

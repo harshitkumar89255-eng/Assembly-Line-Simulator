@@ -84,11 +84,10 @@ if "builder" not in st.session_state:
 st.sidebar.divider()
 st.sidebar.header('Create New Config')
 if st.sidebar.button("Start New Config"):
-    builder = st.session_state["builder"]
     st.session_state['builder_mode'] = True
     
 if st.session_state.get('builder_mode', False):
-
+    builder = st.session_state["builder"]
     st.header("Config Builder")
 
     st.subheader("Simulation")

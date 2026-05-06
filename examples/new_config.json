@@ -6,21 +6,21 @@
     "stations": [
         {
             "id": "stat1",
-            "name": "A",
+            "name": "1",
             "type": "P",
             "cycle_time": 1.0
         },
         {
             "id": "stat2",
-            "name": "B",
+            "name": "2",
             "type": "P",
-            "cycle_time": 3.0
+            "cycle_time": 1.0
         },
         {
             "id": "stat3",
-            "name": "C",
-            "type": "A",
-            "cycle_time": 5.0
+            "name": "3",
+            "type": "P",
+            "cycle_time": 1.0
         }
     ],
     "items": [
@@ -42,18 +42,18 @@
     ],
     "connections": [
         {
-            "id": "conn13",
+            "id": "1_3",
             "from_station": "stat1",
             "to_station": "stat3",
             "item_id": "A",
-            "buffer_capacity": 50
+            "buffer_capacity": 10
         },
         {
-            "id": "conn23",
+            "id": "2_3",
             "from_station": "stat2",
             "to_station": "stat3",
             "item_id": "B",
-            "buffer_capacity": 25
+            "buffer_capacity": 20
         }
     ],
     "recipes": [
@@ -68,14 +68,14 @@
             "station_id": "stat2",
             "inputs": {},
             "outputs": {
-                "B": 2
+                "B": 1
             }
         },
         {
             "station_id": "stat3",
             "inputs": {
-                "A": 2,
-                "B": 1
+                "A": 1,
+                "B": 2
             },
             "outputs": {
                 "C": 1
