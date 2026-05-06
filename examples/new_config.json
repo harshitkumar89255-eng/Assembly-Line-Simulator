@@ -1,0 +1,86 @@
+{
+    "simulation": {
+        "duration": 600,
+        "tick": 1
+    },
+    "stations": [
+        {
+            "id": "stat1",
+            "name": "A",
+            "type": "Process",
+            "cycle_time": 1.0
+        },
+        {
+            "id": "stat2",
+            "name": "B",
+            "type": "Process",
+            "cycle_time": 3.0
+        },
+        {
+            "id": "stat4",
+            "name": "C",
+            "type": "Assembly",
+            "cycle_time": 5.0
+        }
+    ],
+    "items": [
+        {
+            "id": "item1",
+            "name": "PartA",
+            "produced_by": "stat1"
+        },
+        {
+            "id": "item2",
+            "name": "PartB",
+            "produced_by": "stat2"
+        },
+        {
+            "id": "item3",
+            "name": "Product",
+            "produced_by": "stat4"
+        }
+    ],
+    "connections": [
+        {
+            "id": "conn_A_C",
+            "from_station": "stat1",
+            "to_station": "stat4",
+            "item_id": "item1",
+            "buffer_capacity": 50
+        },
+        {
+            "id": "conn_B_C",
+            "from_station": "stat2",
+            "to_station": "stat4",
+            "item_id": "item2",
+            "buffer_capacity": 25
+        }
+    ],
+    "recipes": [
+        {
+            "station_id": "stat1",
+            "inputs": {},
+            "outputs": {
+                "item1": 1
+            }
+        },
+        {
+            "station_id": "stat2",
+            "inputs": {},
+            "outputs": {
+                "item2": 1
+            }
+        },
+        {
+            "station_id": "stat4",
+            "inputs": {
+                "item1": 3,
+                "item2": 2
+            },
+            "outputs": {
+                "item3": 1
+            }
+        }
+    ],
+    "sink_item_id": "item3"
+}

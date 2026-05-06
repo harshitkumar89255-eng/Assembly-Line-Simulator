@@ -1,0 +1,192 @@
+{
+  "simulation": {
+    "duration": 600,
+    "tick": 1
+  },
+  "stations": [
+    {
+      "id": "station_A",
+      "name": "Station A",
+      "type": "process",
+      "cycle_time": 4
+    },
+    {
+      "id": "station_B",
+      "name": "Station B",
+      "type": "process",
+      "cycle_time": 5
+    },
+    {
+      "id": "station_C",
+      "name": "Station C",
+      "type": "process",
+      "cycle_time": 6
+    },
+    {
+      "id": "station_D",
+      "name": "Station D",
+      "type": "process",
+      "cycle_time": 15
+    },
+    {
+      "id": "station_E",
+      "name": "Assembly E",
+      "type": "assembly",
+      "cycle_time": 8
+    },
+    {
+      "id": "station_F",
+      "name": "Assembly F",
+      "type": "assembly",
+      "cycle_time": 8
+    },
+    {
+      "id": "station_G",
+      "name": "Final Assembly G",
+      "type": "assembly",
+      "cycle_time": 10
+    }
+  ],
+  "items": [
+    {
+      "id": "item_A",
+      "name": "Output of Station A",
+      "produced_by": "station_A"
+    },
+    {
+      "id": "item_B",
+      "name": "Output of Station B",
+      "produced_by": "station_B"
+    },
+    {
+      "id": "item_C",
+      "name": "Output of Station C",
+      "produced_by": "station_C"
+    },
+    {
+      "id": "item_D",
+      "name": "Output of Station D",
+      "produced_by": "station_D"
+    },
+    {
+      "id": "item_E",
+      "name": "Assembly E Output",
+      "produced_by": "station_E"
+    },
+    {
+      "id": "item_F",
+      "name": "Assembly F Output",
+      "produced_by": "station_F"
+    },
+    {
+      "id": "item_G",
+      "name": "Final Product G",
+      "produced_by": "station_G"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn_A_E",
+      "from_station": "station_A",
+      "to_station": "station_E",
+      "item_id": "item_A",
+      "buffer_capacity": 100
+    },
+    {
+      "id": "conn_B_E",
+      "from_station": "station_B",
+      "to_station": "station_E",
+      "item_id": "item_B",
+      "buffer_capacity": 100
+    },
+    {
+      "id": "conn_C_F",
+      "from_station": "station_C",
+      "to_station": "station_F",
+      "item_id": "item_C",
+      "buffer_capacity": 100
+    },
+    {
+      "id": "conn_D_F",
+      "from_station": "station_D",
+      "to_station": "station_F",
+      "item_id": "item_D",
+      "buffer_capacity": 100
+    },
+    {
+      "id": "conn_E_G",
+      "from_station": "station_E",
+      "to_station": "station_G",
+      "item_id": "item_E",
+      "buffer_capacity": 100
+    },
+    {
+      "id": "conn_F_G",
+      "from_station": "station_F",
+      "to_station": "station_G",
+      "item_id": "item_F",
+      "buffer_capacity": 100
+    }
+  ],
+  "recipes": [
+    {
+      "station_id": "station_A",
+      "inputs": {},
+      "outputs": {
+        "item_A": 1
+      }
+    },
+    {
+      "station_id": "station_B",
+      "inputs": {},
+      "outputs": {
+        "item_B": 1
+      }
+    },
+    {
+      "station_id": "station_C",
+      "inputs": {},
+      "outputs": {
+        "item_C": 1
+      }
+    },
+    {
+      "station_id": "station_D",
+      "inputs": {},
+      "outputs": {
+        "item_D": 1
+      }
+    },
+    {
+      "station_id": "station_E",
+      "inputs": {
+        "item_A": 1,
+        "item_B": 1
+      },
+      "outputs": {
+        "item_E": 1
+      }
+    },
+    {
+      "station_id": "station_F",
+      "inputs": {
+        "item_C": 1,
+        "item_D": 1
+      },
+      "outputs": {
+        "item_F": 1
+      }
+    },
+    {
+      "station_id": "station_G",
+      "inputs": {
+        "item_E": 1,
+        "item_F": 1
+      },
+      "outputs": {
+        "item_G": 1
+      }
+    }
+  ],
+  "sink_item_id": "item_G"
+}

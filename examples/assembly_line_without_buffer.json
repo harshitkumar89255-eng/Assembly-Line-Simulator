@@ -1,0 +1,86 @@
+{
+  "simulation": {
+    "duration": 900,
+    "tick": 1
+  },
+  "stations": [
+    {
+      "id": "station_A",
+      "name": "Station A",
+      "type": "process",
+      "cycle_time": 5
+    },
+    {
+      "id": "station_B",
+      "name": "Station B",
+      "type": "process",
+      "cycle_time": 8
+    },
+    {
+      "id": "station_C",
+      "name": "Assembly Station C",
+      "type": "assembly",
+      "cycle_time": 10
+    }
+  ],
+  "items": [
+    {
+      "id": "item_A",
+      "name": "Output of Station A",
+      "produced_by": "station_A"
+    },
+    {
+      "id": "item_B",
+      "name": "Output of Station B",
+      "produced_by": "station_B"
+    },
+    {
+      "id": "item_C",
+      "name": "Final Product",
+      "produced_by": "station_C"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn_A_C",
+      "from_station": "station_A",
+      "to_station": "station_C",
+      "item_id": "item_A",
+      "buffer_capacity": 100
+    },
+    {
+      "id": "conn_B_C",
+      "from_station": "station_B",
+      "to_station": "station_C",
+      "item_id": "item_B",
+      "buffer_capacity": 100
+    }
+  ],
+  "recipes": [
+    {
+      "station_id": "station_A",
+      "inputs": {},
+      "outputs": {
+        "item_A": 1
+      }
+    },
+    {
+      "station_id": "station_B",
+      "inputs": {},
+      "outputs": {
+        "item_B": 1
+      }
+    },
+    {
+      "station_id": "station_C",
+      "inputs": {
+        "item_A": 4,
+        "item_B": 3
+      },
+      "outputs": {
+        "item_C": 1
+      }
+    }
+  ],
+  "sink_item_id": "item_C"
+}

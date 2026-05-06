@@ -1,0 +1,60 @@
+{
+  "simulation": {
+    "duration": 300,
+    "tick": 1
+  },
+  "stations": [
+    {
+      "id": "station_1",
+      "name": "Station 1",
+      "type": "process",
+      "cycle_time": 5
+    },
+    {
+      "id": "station_2",
+      "name": "Station 2",
+      "type": "process",
+      "cycle_time": 15
+    }
+  ],
+  "items": [
+    {
+      "id": "item_1",
+      "name": "Output of Station 1",
+      "produced_by": "station_1"
+    },
+    {
+      "id": "item_2",
+      "name": "Output of Station 2",
+      "produced_by": "station_2"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn_1",
+      "from_station": "station_1",
+      "to_station": "station_2",
+      "item_id": "item_1",
+      "buffer_capacity": 10
+    }
+  ],
+  "recipes": [
+    {
+      "station_id": "station_1",
+      "inputs": {},
+      "outputs": {
+        "item_1": 1
+      }
+    },
+    {
+      "station_id": "station_2",
+      "inputs": {
+        "item_1": 2
+      },
+      "outputs": {
+        "item_2": 1
+      }
+    }
+  ],
+  "sink_item_id": "item_2"
+}
