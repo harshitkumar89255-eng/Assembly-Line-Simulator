@@ -3,6 +3,7 @@ import plotly.express as px
 import pandas as pd
 from simulator.config import load_config
 import os
+import simulator.metrics as mt
 from simulator.analysis import run_analysis, run_scenario_analysis
 from simulator.scenario import Scenario
 from simulator.builder import Builder
@@ -62,10 +63,10 @@ if st.sidebar.button("Run Simulation"):
     config = load_config(config_path)
     result = run_analysis(config)
     st.session_state['station_ids'] = []
+    st.session_state['buffers'] = []
     st.session_state["result"] = result
     st.session_state["base_config"] = config
     st.session_state["config_name"] = selected_config_name
-
     st.session_state["scenario_config"] = config
 
     if "scenario_result" in st.session_state:
@@ -198,6 +199,7 @@ if st.session_state.get('builder_mode', False):
 
 if not st.session_state.get('builder_mode',True):
     result = st.session_state["result"]
+    engine = result["engine"]
     system_df = result["system_summary"]
     station_df = result["station_summary"]
     buffer_df = result["buffer_summary"]
@@ -315,11 +317,17 @@ if not st.session_state.get('builder_mode',True):
     fig_util = px.bar(station_df,x="station_name",y=station_graph_options[selected_graph],text=station_graph_options[selected_graph],title=f"Station {selected_graph}")
 
     st.plotly_chart(fig_util, width="stretch")
+    
+    tab1,tab2 = st.tabs(["Buffer Final Level","Buffer Level Graph"])
+    with tab1:
+        fig_buffer = px.bar(buffer_df,x="connection_id",y="final_level",text="final_level",title="Final Buffer Levels")
+        st.plotly_chart(fig_buffer, width="stretch")
+    with tab2:
+        buffer_conn_id = st.selectbox("Select buffer for level graph", buffer_df['connection_id'].tolist())
+        data = mt.buffer_history(engine, buffer_conn_id)
+        fig_buffer_hist = px.line(data,x="time",y="level",title=f"Buffer Level Over Time for {buffer_conn_id}")
+        st.plotly_chart(fig_buffer_hist, width="stretch")
 
-    fig_buffer = px.bar(buffer_df,x="connection_id",y="final_level",text="final_level",title="Final Buffer Levels")
-
-    st.plotly_chart(fig_buffer, width="stretch")
-        
     st.divider()
     if "scenario" not in st.session_state:
         st.session_state["scenario"] = Scenario(st.session_state["scenario_config"])
