@@ -1,58 +1,58 @@
 {
     "simulation": {
-        "duration": 600,
+        "duration": 300,
         "tick": 1
     },
     "stations": [
         {
             "id": "stat1",
             "name": "A",
-            "type": "Process",
+            "type": "P",
             "cycle_time": 1.0
         },
         {
             "id": "stat2",
             "name": "B",
-            "type": "Process",
+            "type": "P",
             "cycle_time": 3.0
         },
         {
-            "id": "stat4",
+            "id": "stat3",
             "name": "C",
-            "type": "Assembly",
+            "type": "A",
             "cycle_time": 5.0
         }
     ],
     "items": [
         {
-            "id": "item1",
-            "name": "PartA",
+            "id": "A",
+            "name": "A",
             "produced_by": "stat1"
         },
         {
-            "id": "item2",
-            "name": "PartB",
+            "id": "B",
+            "name": "B",
             "produced_by": "stat2"
         },
         {
-            "id": "item3",
-            "name": "Product",
-            "produced_by": "stat4"
+            "id": "C",
+            "name": "C",
+            "produced_by": "stat3"
         }
     ],
     "connections": [
         {
-            "id": "conn_A_C",
+            "id": "conn13",
             "from_station": "stat1",
-            "to_station": "stat4",
-            "item_id": "item1",
+            "to_station": "stat3",
+            "item_id": "A",
             "buffer_capacity": 50
         },
         {
-            "id": "conn_B_C",
+            "id": "conn23",
             "from_station": "stat2",
-            "to_station": "stat4",
-            "item_id": "item2",
+            "to_station": "stat3",
+            "item_id": "B",
             "buffer_capacity": 25
         }
     ],
@@ -61,26 +61,26 @@
             "station_id": "stat1",
             "inputs": {},
             "outputs": {
-                "item1": 1
+                "A": 1
             }
         },
         {
             "station_id": "stat2",
             "inputs": {},
             "outputs": {
-                "item2": 1
+                "B": 2
             }
         },
         {
-            "station_id": "stat4",
+            "station_id": "stat3",
             "inputs": {
-                "item1": 3,
-                "item2": 2
+                "A": 2,
+                "B": 1
             },
             "outputs": {
-                "item3": 1
+                "C": 1
             }
         }
     ],
-    "sink_item_id": "item3"
+    "sink_item_id": "C"
 }

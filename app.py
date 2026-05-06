@@ -5,7 +5,7 @@ from simulator.config import load_config
 import os
 from simulator.analysis import run_analysis, run_scenario_analysis
 from simulator.scenario import Scenario
-import simulator.builder as builder
+from simulator.builder import Builder
 
 def text_replace(text):
     return str(text).replace("_", " ").title()
@@ -76,14 +76,14 @@ if st.sidebar.button("Run Simulation"):
     
     st.session_state['builder_mode'] = False
     
-if "builder_data" not in st.session_state:
-    st.session_state["builder_data"] = builder.data
+if "builder" not in st.session_state:
+    st.session_state["builder"] = Builder()
 
-builder.data = st.session_state["builder_data"]
-        
+
 st.sidebar.divider()
 st.sidebar.header('Create New Config')
 if st.sidebar.button("Start New Config"):
+    builder = st.session_state["builder"]
     st.session_state['builder_mode'] = True
     
 if st.session_state.get('builder_mode', False):
@@ -115,7 +115,7 @@ if st.session_state.get('builder_mode', False):
 
     item_id = st.text_input("Item ID", key="item_id")
     item_name = st.text_input("Item Name", key="item_name")
-    produced_by = st.text_input("Produced By (station id)", key="produced_by")
+    produced_by = st.selectbox("Produced By Station", options=builder.station_ids, key="produced_by")
 
     if st.button("Add Item"):
         builder.define_items(item_id, item_name, produced_by)
@@ -124,9 +124,9 @@ if st.session_state.get('builder_mode', False):
     st.subheader("Add Connection")
 
     connection_id = st.text_input("Connection ID", key="conn_id")
-    from_station = st.text_input("From Station", key="from_station")
-    to_station = st.text_input("To Station", key="to_station")
-    item_id_conn = st.text_input("Item ID", key="conn_item_id")
+    from_station = st.selectbox("From Station", options=builder.station_ids, key="from_station")
+    to_station = st.selectbox("To Station", options=builder.station_ids, key="to_station")
+    item_id_conn = st.selectbox("Item in Connection", options=builder.items, key="item_id_conn")
     buffer_capacity = st.number_input("Buffer Capacity", min_value=0, value=10, key="buffer_capacity")
 
     if st.button("Add Connection"):
@@ -138,48 +138,59 @@ if st.session_state.get('builder_mode', False):
     item_ids = [i["id"] for i in builder.data["items"]]
     station_ids = [s["id"] for s in builder.data["stations"]]
 
-    station = st.selectbox("Select Station", station_ids, key="recipe_station")
-    inputs = st.multiselect("Select Input Items (optional)", item_ids, key="inputs")
+    if not station_ids:
+        st.warning("Add at least one station before defining recipes.")
+    elif not item_ids:
+        st.warning("Add at least one item before defining recipes.")
+    else:
+        station = st.selectbox("Select Station", station_ids, key="recipe_station")
+        inputs = st.multiselect("Select Input Items (optional)", item_ids, key="inputs")
 
-    input_qtys = []
-    if inputs:
-        for i in inputs:
-            qty = st.number_input(f"Qty for {i}", min_value=1, value=1, key=f"in_{i}")
-            input_qtys.append(qty)
+        input_qtys = []
+        if inputs:
+            for i in inputs:
+                qty = st.number_input(f"Qty for {i}", min_value=1, value=1, key=f"in_{i}")
+                input_qtys.append(qty)
 
-    outputs = st.multiselect("Select Output Items (optional)", item_ids, key="outputs")
+        outputs = st.multiselect("Select Output Items (optional)", item_ids, key="outputs")
 
-    output_qtys = []
-    if outputs:
-        for o in outputs:
-            qty = st.number_input(f"Qty for {o}", min_value=1, value=1, key=f"out_{o}")
-            output_qtys.append(qty)
+        output_qtys = []
+        if outputs:
+            for o in outputs:
+                qty = st.number_input(f"Qty for {o}", min_value=1, value=1, key=f"out_{o}")
+                output_qtys.append(qty)
 
-    if st.button("Add Recipe"):
-        builder.define_recipes(
-            station,
-            inputs if inputs else [],
-            input_qtys if inputs else [],
-            outputs if outputs else [],
-            output_qtys if outputs else []
-        )
-        st.success("Recipe Added")
-
+        if st.button("Add Recipe"):
+            builder.define_recipes(
+                station,
+                inputs if inputs else [],
+                input_qtys if inputs else [],
+                outputs if outputs else [],
+                output_qtys if outputs else []
+            )
+            st.success("Recipe Added")
+            
     st.subheader("Sink Item")
 
-    sink_item = st.text_input("Enter Sink Item ID", key="sink_item")
+    sink_item = st.selectbox("Select Sink Item", options=builder.items, key="sink_item")
 
     if st.button("Add Sink Item"):
         builder.define_sink_item(sink_item)
         st.success("Sink item set")
-
+    st.divider()
     st.subheader("Save Config")
 
     filename = st.text_input("Enter Name of the File", value="new_config.json", key="filename")
-
-    if st.button("Save Config"):
+    col1,col2 = st.columns(2)
+    
+    if col1.button("Save Config"):
         builder.save_to_json(filename)
         st.success(f"Saved to {filename}")
+        st.rerun()
+    
+    if col2.button("Reset Builder"):
+        builder.reset()
+        st.success("Builder reset successfully.")
         st.rerun()
 
 
