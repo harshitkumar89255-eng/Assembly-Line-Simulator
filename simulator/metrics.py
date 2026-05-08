@@ -7,8 +7,9 @@ def station_summary(engine):
     
     for station_id,station in engine.stations.items():
         utilization = station.busy_time/duration
+        quant = 0
         for item_id,qty in station.outputs.items():
-            quant = qty
+            quant += qty
         rows.append({
             "station_id" : station_id,
             "station_name": station.name,
@@ -227,7 +228,6 @@ def diagnose(engine, accumulation_delta_threshold=0.05, accumulation_level_thres
         candidates = candidates.loc[candidates["starved_time"] == candidates["starved_time"].min()].copy() if not candidates.empty else candidates
         candidates = candidates.loc[candidates["blocked_time"] == candidates["blocked_time"].min()].copy() if not candidates.empty else candidates
         diagnosis["likely_bottlenecks"] = list(candidates["station_name"].values)
-
     return diagnosis
 
 def station_info(engine,station_id):
