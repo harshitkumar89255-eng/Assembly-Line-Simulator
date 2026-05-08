@@ -1,0 +1,147 @@
+{
+"simulation": {
+"duration": 400,
+"tick": 1
+},
+
+"stations": [
+    {
+        "id": "source_A",
+        "name": "Source A",
+        "type": "process",
+        "cycle_time": 1.0
+    },
+
+    {
+        "id": "station_B",
+        "name": "Station B",
+        "type": "process",
+        "cycle_time": 3.0
+    },
+
+    {
+        "id": "station_C",
+        "name": "Station C",
+        "type": "process",
+        "cycle_time": 2.0
+    },
+
+    {
+        "id": "assembly_D",
+        "name": "Assembly D",
+        "type": "assembly",
+        "cycle_time": 4.0
+    }
+],
+
+"items": [
+    {
+        "id": "A1",
+        "name": "Raw Material A1",
+        "produced_by": "source_A"
+    },
+
+    {
+        "id": "A2",
+        "name": "Raw Material A2",
+        "produced_by": "source_A"
+    },
+
+    {
+        "id": "B",
+        "name": "Processed B",
+        "produced_by": "station_B"
+    },
+
+    {
+        "id": "C",
+        "name": "Processed C",
+        "produced_by": "station_C"
+    },
+
+    {
+        "id": "D",
+        "name": "Final Product D",
+        "produced_by": "assembly_D"
+    }
+],
+
+"connections": [
+    {
+        "id": "buffer_A_B",
+        "from_station": "source_A",
+        "to_station": "station_B",
+        "item_id": "A1",
+        "buffer_capacity": 20
+    },
+
+    {
+        "id": "buffer_A_C",
+        "from_station": "source_A",
+        "to_station": "station_C",
+        "item_id": "A2",
+        "buffer_capacity": 20
+    },
+
+    {
+        "id": "buffer_B_D",
+        "from_station": "station_B",
+        "to_station": "assembly_D",
+        "item_id": "B",
+        "buffer_capacity": 15
+    },
+
+    {
+        "id": "buffer_C_D",
+        "from_station": "station_C",
+        "to_station": "assembly_D",
+        "item_id": "C",
+        "buffer_capacity": 15
+    }
+],
+
+"recipes": [
+    {
+        "station_id": "source_A",
+        "inputs": {},
+        "outputs": {
+            "A1": 2,
+            "A2": 2
+        }
+    },
+
+    {
+        "station_id": "station_B",
+        "inputs": {
+            "A1": 1
+        },
+        "outputs": {
+            "B": 1
+        }
+    },
+
+    {
+        "station_id": "station_C",
+        "inputs": {
+            "A2": 1
+        },
+        "outputs": {
+            "C": 1
+        }
+    },
+
+    {
+        "station_id": "assembly_D",
+        "inputs": {
+            "B": 1,
+            "C": 1
+        },
+        "outputs": {
+            "D": 1
+        }
+    }
+],
+
+"sink_item_id": "D"
+
+}

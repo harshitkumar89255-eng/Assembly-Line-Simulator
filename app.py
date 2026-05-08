@@ -1,6 +1,8 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+
+from simulator.json_validation import validate_config
 from simulator.config import load_config
 import os
 import simulator.metrics as mt
@@ -60,6 +62,7 @@ selected_config_name = st.sidebar.selectbox(
 config_path = config_options[selected_config_name]
 
 if st.sidebar.button("Run Simulation"):
+    validate_config(config_path)
     config = load_config(config_path)
     result = run_analysis(config)
     st.session_state['station_ids'] = []

@@ -74,15 +74,15 @@ class Builder:
             raise ValueError(f"Item ID {item_id} not defined in items")
         else:
             self.data["sink_item_id"] = item_id
-            
-    def save_to_json(self,filename="simulation.json"):
-        project_root = Path(__file__).parent.parent
-        save_dir = project_root / "examples"
-        
-        if not self.data["simulation"]:
-            raise ValueError("Simulation not defined")
-        save_dir.mkdir(exist_ok=True)
-        with open(save_dir / filename, "w") as f:
+
+    def save_to_json(self, filename, folder="examples"):
+
+        folder_path = Path(folder)
+        folder_path.mkdir(parents=True, exist_ok=True)
+
+        save_path = folder_path / filename
+
+        with open(save_path, "w") as f:
             json.dump(self.data, f, indent=4)
             
         print(f"Saved to {filename}")
