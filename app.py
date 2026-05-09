@@ -1,7 +1,8 @@
 import streamlit as st
+import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
-
+from simulator.visualization import generate_graph
 from simulator.json_validation import validate_config
 from simulator.config import load_config
 import os
@@ -200,6 +201,7 @@ if st.session_state.get('builder_mode', False):
 
 
 if not st.session_state.get('builder_mode',True):
+    config = st.session_state["base_config"]
     result = st.session_state["result"]
     engine = result["engine"]
     system_df = result["system_summary"]
@@ -331,6 +333,10 @@ if not st.session_state.get('builder_mode',True):
         st.plotly_chart(fig_buffer_hist, width="stretch")
 
     st.divider()
+    st.header("Assembly Line Visualization")
+    st.session_state["graph"] = generate_graph(config)
+    st.plotly_chart(st.session_state["graph"], width="stretch")
+    st.divider()
     if "scenario" not in st.session_state:
         st.session_state["scenario"] = Scenario(st.session_state["scenario_config"])
     
@@ -408,6 +414,9 @@ if not st.session_state.get('builder_mode',True):
         formatted_df["changed"] = formatted_df["changed"].apply(format_value)
 
         st.dataframe(formatted_df, use_container_width=True)
+        
+        st.divider()
+        
     else:
         st.info("Make changes in the scenario builder and click 'Run Scenario Analysis' to see the comparison results between the baseline and modified scenario.")
 
